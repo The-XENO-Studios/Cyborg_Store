@@ -131,7 +131,7 @@ export default function Home() {
         delay: 0.2,
         duration: 0.1,
       })
-      .from("#cyborg_img", { opacity: 0, y: 100, duration: 1, delay: 0.15 });
+      .from("#cyborg_img", { opacity: 0, y: 100, duration: 1, delay: 0.3 });
 
     const timeline_hero = gsap.timeline({
       scrollTrigger: {
@@ -142,6 +142,12 @@ export default function Home() {
         pin: true,
         pinSpacing: false,
       },
+    });
+
+    timeline_hero.to("#cyborg_img", {
+      y: 150,
+      opacity: 0.5,
+      duration: 1,
     });
 
     timeline_hero
