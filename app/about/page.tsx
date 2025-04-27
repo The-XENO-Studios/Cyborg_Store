@@ -119,7 +119,7 @@ export default function About() {
                   </div>
                 </div>
                 <CardTitle className="text-center orbitron text-gray-800">
-                  Innovation
+                  IRAM CDI NA
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center relative z-10">
