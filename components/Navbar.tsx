@@ -133,7 +133,7 @@ const Navbar = () => {
                 <Zap className="h-5 w-5 text-primary-foreground relative z-10" />
               </div>
             </div>
-            <span className="text-xl font-bold tracking-tighter orbitron bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <span className="text-xl font-bold tracking-tighter orbitron">
               CyberTech
             </span>
           </Link>
