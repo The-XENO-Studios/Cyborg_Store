@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Brain,
   Cpu,
@@ -18,6 +20,8 @@ import {
   Zap,
   ShoppingCart,
   Crosshair,
+  Star,
+  ChevronRight,
 } from "lucide-react";
 import {
   Dialog,
@@ -29,7 +33,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const products = [
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  icon: React.ElementType;
+  category: string;
+  bodyPart: string;
+  rating: number;
+  reviews: number;
+  badge: {
+    text: string;
+    variant: "default" | "secondary" | "outline";
+  };
+}
+
+const products: Product[] = [
   {
     id: 1,
     name: "NeuroLink Pro",
@@ -38,6 +58,9 @@ const products = [
     icon: Brain,
     category: "Neural",
     bodyPart: "head",
+    rating: 5,
+    reviews: 128,
+    badge: { text: "New", variant: "default" },
   },
   {
     id: 2,
@@ -47,6 +70,9 @@ const products = [
     icon: Eye,
     category: "Optical",
     bodyPart: "head",
+    rating: 4,
+    reviews: 96,
+    badge: { text: "Popular", variant: "secondary" },
   },
   {
     id: 3,
@@ -56,6 +82,9 @@ const products = [
     icon: Heart,
     category: "Cardiovascular",
     bodyPart: "torso",
+    rating: 5,
+    reviews: 214,
+    badge: { text: "Premium", variant: "outline" },
   },
   {
     id: 4,
@@ -65,6 +94,9 @@ const products = [
     icon: Cpu,
     category: "Neural",
     bodyPart: "head",
+    rating: 4,
+    reviews: 87,
+    badge: { text: "Advanced", variant: "secondary" },
   },
   {
     id: 5,
@@ -74,6 +106,9 @@ const products = [
     icon: Zap,
     category: "Power",
     bodyPart: "torso",
+    rating: 5,
+    reviews: 156,
+    badge: { text: "Bestseller", variant: "default" },
   },
   {
     id: 6,
@@ -83,6 +118,9 @@ const products = [
     icon: Crosshair,
     category: "Limb",
     bodyPart: "arms",
+    rating: 4,
+    reviews: 103,
+    badge: { text: "Military", variant: "outline" },
   },
   {
     id: 7,
@@ -92,14 +130,13 @@ const products = [
     icon: Crosshair,
     category: "Limb",
     bodyPart: "legs",
+    rating: 4,
+    reviews: 78,
+    badge: { text: "Athletic", variant: "secondary" },
   },
 ];
 
 export default function Products() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedBodyPart, setSelectedBodyPart] = useState<string | null>(null);
-  const [hoveredPart, setHoveredPart] = useState<string | null>(null);
-
   const categories = [
     "All",
     "Neural",
@@ -108,6 +145,19 @@ export default function Products() {
     "Power",
     "Limb",
   ];
+
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedBodyPart, setSelectedBodyPart] = useState<string | null>(null);
+  const [hoveredPart, setHoveredPart] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+
+  // Handle category from URL parameter
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    if (categoryParam && categories.includes(categoryParam)) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
 
   const filteredProducts = products.filter((product) => {
     const categoryMatch =
@@ -123,6 +173,10 @@ export default function Products() {
   };
 
   const getPartClassName = (part: string) => {
+    if (selectedBodyPart && selectedBodyPart !== part) {
+      // Gray out all parts except the selected one
+      return "fill-gray-200 stroke-[3] stroke-gray-300 cursor-pointer transition-all duration-300";
+    }
     if (selectedBodyPart === part) {
       return "fill-primary stroke-[3] stroke-primary-foreground cursor-pointer transition-all duration-300";
     }
@@ -133,15 +187,27 @@ export default function Products() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-20 pb-12 bg-[#FAFAFA]">
       <Dialog>
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-8">Our Products</h1>
+          <h1 className="text-gray-900 text-5xl orbitron font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            Our Products
+          </h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             {/* Interactive Body Diagram */}
-            <div className="hidden lg:block lg:col-span-4 bg-card rounded-lg p-6 border relative">
-              <h2 className="text-xl font-semibold mb-4">Select Body Region</h2>
+            <div className="hidden lg:block lg:col-span-4 bg-white rounded-lg p-6 border border-primary/20 shadow-md relative">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl orbitron font-semibold text-gray-800">
+                  Select Body Region
+                </h2>
+                {selectedBodyPart && (
+                  <Badge className="bg-primary/10 text-primary border-primary/30 orbitron">
+                    {selectedBodyPart.charAt(0).toUpperCase() +
+                      selectedBodyPart.slice(1)}
+                  </Badge>
+                )}
+              </div>
               <div className="relative w-full max-w-[300px] mx-auto">
                 <svg
                   viewBox="0 0 200 400"
@@ -167,7 +233,7 @@ export default function Products() {
 
                   {/* Head */}
                   <path
-                    d="M 100 60 
+                    d="M 100 60
                      C 130 60, 150 90, 150 120
                      C 150 150, 130 170, 100 170
                      C 70 170, 50 150, 50 120
@@ -266,7 +332,7 @@ export default function Products() {
                 <div className="mt-4">
                   <Button
                     variant="outline"
-                    className="w-full"
+                    className="w-full orbitron border-primary/30 text-primary hover:bg-primary/20 hover:text-primary"
                     onClick={() => setSelectedBodyPart(null)}
                   >
                     Clear Selection
@@ -276,21 +342,34 @@ export default function Products() {
             </div>
 
             <DialogTrigger asChild>
-              <Button className="lg:hidden" variant={"default"}>
+              <Button
+                className="lg:hidden orbitron bg-primary/80 hover:bg-primary"
+                variant={"default"}
+              >
                 Show Body Diagram
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Select Body Part</DialogTitle>
+                <DialogTitle className="orbitron text-gray-800">
+                  Select Body Part
+                </DialogTitle>
                 <DialogDescription>
                   Choose the body part you want to enhance or replace.
                 </DialogDescription>
               </DialogHeader>
-              <div className="lg:col-span-4 bg-card rounded-lg p-6 border relative">
-                <h2 className="text-xl font-semibold mb-4">
-                  Select Body Region
-                </h2>
+              <div className="lg:col-span-4 bg-white rounded-lg p-6 border border-primary/20 shadow-md relative">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl orbitron font-semibold text-gray-800">
+                    Select Body Region
+                  </h2>
+                  {selectedBodyPart && (
+                    <Badge className="bg-primary/10 text-primary border-primary/30 orbitron">
+                      {selectedBodyPart.charAt(0).toUpperCase() +
+                        selectedBodyPart.slice(1)}
+                    </Badge>
+                  )}
+                </div>
                 <div className="relative w-full max-w-[300px] mx-auto">
                   <svg
                     viewBox="0 0 200 400"
@@ -316,7 +395,7 @@ export default function Products() {
 
                     {/* Head */}
                     <path
-                      d="M 100 60 
+                      d="M 100 60
                      C 130 60, 150 90, 150 120
                      C 150 150, 130 170, 100 170
                      C 70 170, 50 150, 50 120
@@ -415,7 +494,7 @@ export default function Products() {
                   <div className="mt-4">
                     <Button
                       variant="outline"
-                      className="w-full"
+                      className="w-full orbitron border-primary/30 text-primary hover:bg-primary/20 hover:text-primary"
                       onClick={() => setSelectedBodyPart(null)}
                     >
                       Clear Selection
@@ -434,6 +513,11 @@ export default function Products() {
                     variant={
                       selectedCategory === category ? "default" : "outline"
                     }
+                    className={
+                      selectedCategory === category
+                        ? "orbitron bg-primary/80 hover:bg-primary"
+                        : "orbitron border-primary/30 text-primary hover:bg-primary/20 hover:text-primary"
+                    }
                     onClick={() => {
                       setSelectedCategory(category);
                       setSelectedBodyPart(null);
@@ -449,44 +533,83 @@ export default function Products() {
                 {filteredProducts.map((product) => {
                   const Icon = product.icon;
                   return (
-                    <Card key={product.id}>
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <Icon className="h-8 w-8 text-primary" />
-                          <span className="text-xl font-bold">
-                            ${product.price.toLocaleString()}
+                    <Card
+                      key={product.id}
+                      className="border border-primary/20 shadow-lg overflow-hidden group bg-white hover:border-primary/40 transition-all relative"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="bg-primary/5 p-8 flex justify-center items-center border-b border-primary/20">
+                        <Icon className="h-16 w-16 text-primary group-hover:scale-110 transition-transform" />
+                      </div>
+                      <CardHeader className="relative z-10">
+                        <div className="flex justify-between items-start">
+                          <CardTitle className="orbitron text-gray-800">
+                            {product.name}
+                          </CardTitle>
+                          {product.badge && (
+                            <Badge
+                              variant={product.badge.variant as any}
+                              className={`${
+                                product.badge.variant === "default"
+                                  ? "bg-primary/10"
+                                  : ""
+                              } ${
+                                product.badge.variant === "secondary"
+                                  ? "bg-primary/10"
+                                  : ""
+                              } text-primary border-primary/30 orbitron`}
+                            >
+                              {product.badge.text}
+                            </Badge>
+                          )}
+                        </div>
+                        <CardDescription className="text-gray-500">
+                          {product.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="relative z-10">
+                        <div className="flex items-center gap-1 mb-4">
+                          {Array(5)
+                            .fill(0)
+                            .map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-4 w-4 ${
+                                  i < product.rating
+                                    ? "text-yellow-500 fill-yellow-500"
+                                    : "text-gray-400"
+                                }`}
+                              />
+                            ))}
+                          <span className="text-sm text-gray-500 ml-2">
+                            ({product.reviews} reviews)
                           </span>
                         </div>
-                        <CardTitle className="mt-4">{product.name}</CardTitle>
-                        <CardDescription>{product.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-2 text-sm">
-                          <li className="flex items-center">
-                            <span className="w-32">Category:</span>
-                            <span className="font-medium">
+                        <div className="space-y-2 text-sm mb-4">
+                          <div className="flex items-center">
+                            <span className="w-32 text-gray-500">
+                              Category:
+                            </span>
+                            <span className="font-medium text-gray-700">
                               {product.category}
                             </span>
-                          </li>
-                          <li className="flex items-center">
-                            <span className="w-32">Body Part:</span>
-                            <span className="font-medium capitalize">
+                          </div>
+                          <div className="flex items-center">
+                            <span className="w-32 text-gray-500">
+                              Body Part:
+                            </span>
+                            <span className="font-medium text-gray-700 capitalize">
                               {product.bodyPart}
                             </span>
-                          </li>
-                          <li className="flex items-center">
-                            <span className="w-32">Warranty:</span>
-                            <span className="font-medium">10 Years</span>
-                          </li>
-                          <li className="flex items-center">
-                            <span className="w-32">Installation:</span>
-                            <span className="font-medium">Included</span>
-                          </li>
-                        </ul>
+                          </div>
+                        </div>
+                        <p className="text-2xl font-bold orbitron text-gray-800">
+                          ${product.price.toLocaleString()}
+                        </p>
                       </CardContent>
-                      <CardFooter>
-                        <Button className="w-full">
-                          <ShoppingCart className="mr-2 h-4 w-4" />
+                      <CardFooter className="relative z-10">
+                        <Button className="w-full gap-2 orbitron bg-primary/80 hover:bg-primary">
+                          <ShoppingCart className="h-4 w-4" />
                           Add to Cart
                         </Button>
                       </CardFooter>
