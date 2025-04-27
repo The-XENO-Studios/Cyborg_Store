@@ -122,8 +122,6 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger);
     const text = new SplitType("#hero-text", { splitClass: "split_char" });
 
-    let mm = gsap.matchMedia();
-
     const timeline1 = gsap.timeline();
 
     timeline1
@@ -141,7 +139,6 @@ export default function Home() {
         start: "51% center",
         end: "150% center",
         scrub: true,
-        markers: true,
         pin: true,
         pinSpacing: false,
       },
@@ -194,7 +191,7 @@ export default function Home() {
       >
         {/* Welcome Section */}
         <div className="w-full max-w-7xl my-20">
-          <h2 className="text-5xl orbitron font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground text-neutral-900">
+          <h2 className="text-gray-900 text-5xl orbitron font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
             Welcome to CyberTech
           </h2>
           <p className="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600">

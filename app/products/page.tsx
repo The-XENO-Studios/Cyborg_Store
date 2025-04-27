@@ -190,7 +190,7 @@ export default function Products() {
     <div className="min-h-screen pt-20 pb-12 bg-[#FAFAFA]">
       <Dialog>
         <div className="container mx-auto px-4">
-          <h1 className="text-gray-900 text-5xl orbitron font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+          <h1 className="text-gray-900 text-5xl orbitron font-bold mb-8">
             Our Products
           </h1>
 

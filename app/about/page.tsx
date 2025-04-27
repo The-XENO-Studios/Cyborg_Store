@@ -27,7 +27,7 @@ export default function About() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-gray-900 text-5xl orbitron font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <h1 className="text-gray-900 text-5xl orbitron font-bold mb-6">
               About CyberTech
             </h1>
             <p className="text-xl text-gray-600 mb-8">
