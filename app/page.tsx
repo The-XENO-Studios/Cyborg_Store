@@ -191,7 +191,7 @@ export default function Home() {
       >
         {/* Welcome Section */}
         <div className="w-full max-w-7xl my-20">
-          <h2 className="text-gray-900 text-5xl orbitron font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+          <h2 className="text-gray-900 text-5xl orbitron font-bold mb-8 text-center">
             Welcome to CyberTech
           </h2>
           <p className="text-xl text-center mb-12 max-w-3xl mx-auto text-gray-600">
