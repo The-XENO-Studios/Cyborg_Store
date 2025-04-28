@@ -31,9 +31,12 @@ export default function About() {
               About CyberTech
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Leading the revolution in human augmentation technology since
-              2020. We believe in enhancing human capabilities through ethical
-              and cutting-edge cybernetic solutions.
+              I respect everyone around me. Except only one trash, **** Iram,
+              the greatest piece of **** I have ever seen. If you can't respect
+              me after all I have done, then you can just get lost. No matter
+              who you are, respect me and give me my rights or otherwise face
+              the consequences. Also, why lose a prize when you can just have
+              it.
             </p>
           </div>
         </div>
